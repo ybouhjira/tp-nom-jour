@@ -39,28 +39,11 @@ char* nom_jour(int an, int mois, int jour)
     }
 }
 
-int verifie_date(short int jour, short int mois, int annee)
+int verifie_date(int jour, int mois, int an)
 {
-  // Test jour
-  if(jour < 1 || jour > 31) return 0;
-  switch (mois) {
-    case 1: case 3: case 5: case 7: case 8: case 10: case 12:
-      if(jour > 30) return 0;
-      break;
-    case 4: case 6: case 9: case 11:
-      if(jour > 31) return 0;
-      break;
-    case 2:
-      if((annee % 4 == 0 && jour > 29) || (annee % 4 != 0 && jour > 28))
-        return 0;
-    }
-
-  // Test mois
-  if(mois < 1 || mois > 12) return 0;
-
-  // Test annee
-  if((annee < 1901) || (annee > 2099)) return 0;
-
+  if(mois < 1 || mois > 12 || jour < 1 || an < 1901 || an > 2099 ||
+     jour > ((mois == 2)? 28 + !(an % 4) : 30 + (((mois * 9) / 8 ) & 1)))
+    return 0;
   return 1;
 }
 
@@ -71,9 +54,7 @@ int main(void)
   scanf("%d/%d/%d", &j, &m, &a);
 
   if(verifie_date(j, m, a))
-    {
       printf("Le %d/%d/%d est un %s\n", j, m, a, nom_jour(a, m, j));
-    }
   else printf("Date invalide\n");
 
   return 0;
