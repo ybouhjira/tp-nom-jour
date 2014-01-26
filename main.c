@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #define REP_ANNEE 1901
 #define REP_MOIS 1
@@ -11,19 +12,31 @@ int jours_annee(int annee)
   return (annee - REP_ANNEE) * 365 +   (annee - REP_ANNEE)/4;
 }
 
-int longueur_mois(int an, int mois)
+int jours_mois(short int mois, int annee)
 {
-  assert(1 <= mois && mois <= 12);
-  return mois == 2 ? an % 4? 28 : 29 : 30 + (((mois * 9) / 8) & 1);
+  int nbrJours = 0;
+  switch (mois-1)
+    {
+    case 11: nbrJours += 30;
+    case 10: nbrJours += 31;
+    case 9: nbrJours += 30;
+    case 8: nbrJours += 31;
+    case 7: nbrJours += 31;
+    case 6: nbrJours += 30;
+    case 5: nbrJours += 31;
+    case 4: nbrJours += 30;
+    case 3: nbrJours += 31;
+    case 2: nbrJours += (annee % 4 == 0)? 29 : 28;
+    case 1: nbrJours += 31;
+    }
+  return nbrJours;
 }
 
-unsigned int jours_date(int annee, int mois, int jour)
+char* nom_jour(int an, int mois, int jour)
 {
-  return (jours_annee(annee) + jours_mois(mois, annee) + jour - 1);
-}
 
-char* nom_jour(short int indice)
-{
+  int indice = (jours_annee(an) + jours_mois(mois, an) + jour - 1) % 7;
+
   switch(indice)
     {
     case 0: return "Mardi";
@@ -61,14 +74,13 @@ int verifie_date(short int jour, short int mois, int annee)
 
 int main(void)
 {
-  int jour, mois, annee;
+  int j, m, a;
   printf("Entrez une date (jj/mm/aaaa) : ");
-  scanf("%d/%d/%d", &jour, &mois, &annee);
+  scanf("%d/%d/%d", &j, &m, &a);
 
-  if(verifie_date(jour, mois, annee))
+  if(verifie_date(j, m, a))
     {
-      short int indice = jours_date(annee, mois, jour) % 7;
-      printf("Le %d/%d/%d est un %s\n", jour, mois, annee, nom_jour(indice));
+      printf("Le %d/%d/%d est un %s\n", j, m, a, nom_jour(a, m, j));
     }
   else printf("Date invalide\n");
 
