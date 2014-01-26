@@ -27,10 +27,7 @@ int jours_mois(short int mois, int an)
 
 char* nom_jour(int an, int mois, int jour)
 {
-
-  int indice = (jours_annee(an) + jours_mois(mois, an) + jour - 1) % 7;
-
-  switch(indice)
+  switch((jours_annee(an) + jours_mois(mois, an) + jour - 1) % 7)
     {
     case 0: return "Mardi";
     case 1: return "Mercredi";
@@ -49,8 +46,10 @@ int verifie_date(short int jour, short int mois, int annee)
   switch (mois) {
     case 1: case 3: case 5: case 7: case 8: case 10: case 12:
       if(jour > 30) return 0;
+      break;
     case 4: case 6: case 9: case 11:
       if(jour > 31) return 0;
+      break;
     case 2:
       if((annee % 4 == 0 && jour > 29) || (annee % 4 != 0 && jour > 28))
         return 0;
