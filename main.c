@@ -12,24 +12,17 @@ int jours_annee(int annee)
   return (annee - REP_ANNEE) * 365 +   (annee - REP_ANNEE)/4;
 }
 
-int jours_mois(short int mois, int annee)
+int longueur_mois(int an, int mois)
 {
-  int nbrJours = 0;
-  switch (mois-1)
-    {
-    case 11: nbrJours += 30;
-    case 10: nbrJours += 31;
-    case 9: nbrJours += 30;
-    case 8: nbrJours += 31;
-    case 7: nbrJours += 31;
-    case 6: nbrJours += 30;
-    case 5: nbrJours += 31;
-    case 4: nbrJours += 30;
-    case 3: nbrJours += 31;
-    case 2: nbrJours += (annee % 4 == 0)? 29 : 28;
-    case 1: nbrJours += 31;
-    }
-  return nbrJours;
+  assert(1 <= mois && mois <= 12);
+  return mois == 2 ? an % 4? 28 : 29 : 30 + (((mois * 9) / 8) & 1);
+}
+
+int jours_mois(short int mois, int an)
+{
+  int nombreJours = 0, m;
+  for(m = mois - 1; m >= 1; --m) nombreJours += longueur_mois(an, m);
+  return nombreJours;
 }
 
 char* nom_jour(int an, int mois, int jour)
