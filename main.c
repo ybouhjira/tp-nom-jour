@@ -3,21 +3,45 @@
 #include <string.h>
 #include <assert.h>
 
-#define REP_ANNEE 1901
-#define REP_MOIS 1
-#define REP_JOUR 1
+#define REP_A 1901
+#define REP_M 1
+#define REP_J 1
 
-int jours_annee(int annee)
+
+/*
+ * Nom de la fonction : jours_annee
+ * Entrée:
+ *   int a: Une année comprise entre 1901 et 2099
+ * Sortie:
+ *   int jours : Le nombre de jours depuis 1901 jusqu'à cette année
+ */
+int jours_annee(int a)
 {
-  return (annee - REP_ANNEE) * 365 +   (annee - REP_ANNEE)/4;
+  return (a - REP_A) * 365 +   (a - REP_A) / 4;
 }
 
-int longueur_mois(int an, int mois)
+/*
+ * Nom de la fonction : longueur_mois
+ * Entrées:
+ *  int a : Une année comprise entre 1901 et 2099
+ *  int m : Le mois
+ * Sortie:
+ *  int nombreJours : Le nombre de jour dans le mois
+ */
+int longueur_mois(int a, int m)
 {
-  assert(1 <= mois && mois <= 12);
-  return mois == 2 ? an % 4? 28 : 29 : 30 + (((mois * 9) / 8) & 1);
+  return m == 2 ? (a % 4? 28 : 29) : 30 + ((m + m / 8) & 1);
 }
 
+/*
+ * Nom de la fonction : jours_mois
+ * Entrées:
+ *   short int mois : Le mois
+ *   int an : L'année
+ * Sortie:
+ *   int nombreJours : Le nombre de jours du début de l'année jusqu'au début 
+ *  du mois.
+ */
 int jours_mois(short int mois, int an)
 {
   int nombreJours = 0, m;
@@ -25,6 +49,16 @@ int jours_mois(short int mois, int an)
   return nombreJours;
 }
 
+/* Nom de la fonction : nom_jour
+ * Entrées:
+ *  int an : Une année comprise entre 1901 et 2099
+ *  int mois : Le mois
+ *  int jour : Le jour
+ * Sortie:
+ *  char* : Le nom du jour en français
+ * Description :  
+ *  Retourne le nom du jour pour une date comprise entre 1-1-1901 et 31-12-2099
+ */
 char* nom_jour(int an, int mois, int jour)
 {
   switch((jours_annee(an) + jours_mois(mois, an) + jour - 1) % 7)
@@ -39,10 +73,26 @@ char* nom_jour(int an, int mois, int jour)
     }
 }
 
-int verifie_date(int jour, int mois, int an)
+/* Nom de la fonction : verifie_date
+ * Entrées:
+ *   int jour : Le jour
+ *   int mois : Le mois
+ *   int an : L'année
+ * Sortie:
+ *  int valide : 1 si la date est valide et 0 dans l'autre cas
+ * Description:
+ *   Vérifie si l'année est comprise entre 1901 et 2099, le mois entre 1 et 12
+ *  et le nombre des jours selon le mois.
+ */
+int verifie_date(int j, int m, int a)
 {
-  if(mois < 1 || mois > 12 || jour < 1 || an < 1901 || an > 2099 ||
-     jour > ((mois == 2)? 28 + !(an % 4) : 30 + (((mois * 9) / 8 ) & 1)))
+  if(m < 1 ||
+     m > 12 ||
+     j < 1 ||
+     a < 1901 ||
+     a > 2099 ||
+     j > ((m == 2)? 28 + !(a % 4) : 30 + (((m * 9) / 8 ) & 1))
+    )
     return 0;
   return 1;
 }
