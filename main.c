@@ -1,14 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 
 #define REP_A 1901
-#define REP_M 1
-#define REP_J 1
 
-
-/*
+/**
  * Nom de la fonction : jours_annee
  * Entrée:
  *   int a: Une année comprise entre 1901 et 2099
@@ -17,10 +13,10 @@
  */
 int jours_annee(int a)
 {
-  return (a - REP_A) * 365 +   (a - REP_A) / 4;
+  return (a - REP_A) * 365.25;
 }
 
-/*
+/**
  * Nom de la fonction : longueur_mois
  * Entrées:
  *  int a : Une année comprise entre 1901 et 2099
@@ -33,13 +29,13 @@ int longueur_mois(int a, int m)
   return m == 2 ? (a % 4? 28 : 29) : 30 + ((m + m / 8) & 1);
 }
 
-/*
+/**
  * Nom de la fonction : jours_mois
  * Entrées:
  *   short int mois : Le mois
  *   int an : L'année
  * Sortie:
- *   int nombreJours : Le nombre de jours du début de l'année jusqu'au début 
+ *   int nombreJours : Le nombre de jours du début de l'année jusqu'au début
  *  du mois.
  */
 int jours_mois(short int mois, int an)
@@ -49,14 +45,15 @@ int jours_mois(short int mois, int an)
   return nombreJours;
 }
 
-/* Nom de la fonction : nom_jour
+/**
+ * Nom de la fonction : nom_jour
  * Entrées:
  *  int an : Une année comprise entre 1901 et 2099
  *  int mois : Le mois
  *  int jour : Le jour
  * Sortie:
  *  char* : Le nom du jour en français
- * Description :  
+ * Description :
  *  Retourne le nom du jour pour une date comprise entre 1-1-1901 et 31-12-2099
  */
 char* nom_jour(int an, int mois, int jour)
@@ -73,7 +70,8 @@ char* nom_jour(int an, int mois, int jour)
     }
 }
 
-/* Nom de la fonction : verifie_date
+/**
+ * Nom de la fonction : verifie_date
  * Entrées:
  *   int jour : Le jour
  *   int mois : Le mois
@@ -86,27 +84,26 @@ char* nom_jour(int an, int mois, int jour)
  */
 int verifie_date(int j, int m, int a)
 {
-  if(m < 1 ||
-     m > 12 ||
-     j < 1 ||
-     a < 1901 ||
-     a > 2099 ||
-     j > ((m == 2)? 28 + !(a % 4) : 30 + (((m * 9) / 8 ) & 1))
+  if(j < 1
+     || j > longueur_mois(a, m)
+     || m < 1
+     || m > 12
+     || a < 1901
+     || a > 2099
     )
     return 0;
   return 1;
 }
 
-int main(void)
+int main()
 {
   int j, m, a;
   printf("Entrez une date (jj/mm/aaaa) : ");
   scanf("%d/%d/%d", &j, &m, &a);
 
   if(verifie_date(j, m, a))
-      printf("Le %d/%d/%d est un %s\n", j, m, a, nom_jour(a, m, j));
+    printf("Le %d/%d/%d est un %s\n", j, m, a, nom_jour(a, m, j));
   else printf("Date invalide\n");
 
   return 0;
 }
-
